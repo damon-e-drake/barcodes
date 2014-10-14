@@ -14,6 +14,10 @@ namespace ConsoleApp {
         b.SaveAs("9780816155293.png", true);
       }
 
+      using (var c= new Code39("DAC148")) {
+        c.SaveAs("122.png", true);
+      }
+
       Console.WriteLine("043942089X".ISBNConvert10To13());
       Console.WriteLine("978034553898".ISBNConvert13to10());
 
