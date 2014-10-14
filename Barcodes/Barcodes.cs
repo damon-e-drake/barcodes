@@ -47,7 +47,14 @@ namespace Smelds.Barcodes {
       }
     }
 
-    public Image Barcode { get; private set; }
+    private Image barcodeImage;
+    public Image BarcodeImage {
+      get {
+        if (this.barcodeImage == null) { this.barcodeImage = Image.FromStream(ms); }
+        return this.barcodeImage;
+      }
+    }
+
     private StringBuilder BinaryText { get; set; }
     private int LineBuffer { get; set; }
 
@@ -112,7 +119,7 @@ namespace Smelds.Barcodes {
 
     private void CalculateFirstSet(char[] set) {
       var main = new[] { "0001101", "0011001", "0010011", "0111101", "0100011", "0110001", "0101111", "0111011", "0110111", "0001011" };
-      var alt = new[]  { "0100111", "0110011", "0011011", "0100001", "0011101", "0111001", "0000101", "0010001", "0001001", "0010111" };
+      var alt = new[] { "0100111", "0110011", "0011011", "0100001", "0011101", "0111001", "0000101", "0010001", "0001001", "0010111" };
 
       for (int i = 1; i <= 6; i++) {
         var index = int.Parse(set[i].ToString());
@@ -136,7 +143,7 @@ namespace Smelds.Barcodes {
     }
 
     public void Dispose() {
-      if (this.Barcode != null) { this.Barcode.Dispose(); }
+      if (this.BarcodeImage != null) { this.BarcodeImage.Dispose(); }
       this.ms.Dispose();
       this.BinaryText = null;
     }
