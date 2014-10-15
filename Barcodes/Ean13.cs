@@ -5,6 +5,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Smelds.Barcodes {
@@ -39,8 +40,15 @@ namespace Smelds.Barcodes {
       }
     }
 
-    public Ean13(string code) : base(code) {
+    public bool IsValid {
+      get {
+        return this.Code[11].ToString() == CalculateCheckDigit();
+      }
+    }
 
+    public Ean13(string code) : base(code) {
+      if (!Regex.IsMatch(this.Code, @"^(\d{12}|\d{13})$")) { throw new FormatException("ISBN 13 must be either 12 or 13 digits with no formatting."); }
+      if (this.Code.Length == 12) { this.Code += CalculateCheckDigit(); }
     }
 
     protected override void RenderBarcode() {
@@ -61,7 +69,7 @@ namespace Smelds.Barcodes {
             g.SmoothingMode = SmoothingMode.AntiAlias;
             g.InterpolationMode = InterpolationMode.HighQualityBicubic;
             g.PixelOffsetMode = PixelOffsetMode.HighQuality;
-            g.DrawString("9", new Font("Courier", 8), Brushes.Black, r);
+            g.DrawString(this.Code[0].ToString(), new Font("Courier", 8), Brushes.Black, r);
 
             r = new Rectangle(26, 72, 42, 15);
             g.DrawString(Code.Substring(1, 6), new Font("Courier", 8), Brushes.Black, r);
@@ -95,6 +103,16 @@ namespace Smelds.Barcodes {
       }
     }
 
+    private string CalculateCheckDigit() {
+      var k = 0;
+
+      for (int i = 1; i < this.Code.Length; i++) {
+        k += i % 2 == 0 ? int.Parse(this.Code[i - 1].ToString()) * 3 : int.Parse(this.Code[i - 1].ToString());
+      }
+
+      return (10 - (k % 10)).ToString();
+    }
+
     private void CalculateLeftSide(char[] set) {
       var parity = Ean13.ParityEncoding[set[0]].ToCharArray();
 
@@ -107,7 +125,6 @@ namespace Smelds.Barcodes {
       for (int i = 7; i < set.Length; i++) {
         this.BinaryText.Append(NumberEncoding[set[i]].RighHand);
       }
-    }
-   
+    }   
   }
 }

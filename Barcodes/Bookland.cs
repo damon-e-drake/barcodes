@@ -48,7 +48,7 @@ namespace Smelds.Barcodes {
       }
     }
 
-    [Obsolete("Replaced by Ean13 which it should have been in the first place.")]
+    [Obsolete("Replaced by Ean13 class. Will be completely removed in the 1.0 release.")]
     public Bookland(string ISBN) : base(ISBN) {
       
     }
