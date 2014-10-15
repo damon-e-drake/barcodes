@@ -10,6 +10,10 @@ namespace ConsoleApp {
   public class Program {
     public static void Main(string[] args) {
 
+      using (var b = new Ean13("9780816155293")) {
+        b.SaveAs("ean-13.png", true);
+      }
+
       using (var b = new Bookland("9780816155293")) {
         b.SaveAs("9780816155293.png", true);
       }

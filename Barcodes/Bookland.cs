@@ -40,7 +40,7 @@ namespace Smelds.Barcodes {
     }
   }
 
-  public class Bookland : Barcode {
+  public sealed class Bookland : Barcode {
     public override byte[] BinaryImage {
       get {
         if (this.ms.Length == 0) { RenderBarcode(); }
@@ -48,6 +48,7 @@ namespace Smelds.Barcodes {
       }
     }
 
+    [Obsolete("Replaced by Ean13 which it should have been in the first place.")]
     public Bookland(string ISBN) : base(ISBN) {
       
     }

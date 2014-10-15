@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Smelds.Barcodes {
-  public class Code39 : Barcode {
+  public sealed class Code39 : Barcode {
 
     private static Dictionary<char, string> Masks = new Dictionary<char, string> {
       {'*', "100000101110111010"},
