@@ -14,7 +14,7 @@ namespace ConsoleApp {
         b.SaveAs("9780816155293.png", true);
       }
 
-      using (var c= new Code39("20528")) {
+      using (var c = new Code39("20528")) {
         c.SaveAs("122.png", true);
       }
 

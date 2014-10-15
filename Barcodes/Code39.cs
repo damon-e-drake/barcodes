@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Smelds.Barcodes {
-  public class Code39 : IDisposable {
+  public class Code39 : Barcode {
 
     private static Dictionary<char, string> Masks = new Dictionary<char, string> {
       {'*', "100000101110111010"},
@@ -59,29 +59,19 @@ namespace Smelds.Barcodes {
       {'Z', "100000111011101010"}
     };
 
-    public byte[] BinaryImage {
+    public override byte[] BinaryImage {
       get {
+        if (this.ms.Length == 0) { this.RenderBarcode(); }
         return ms.ToArray();
       }
     }
 
-    private Image barcodeImage;
-    public Image BarcodeImage {
-      get {
-        if (this.barcodeImage == null) { this.barcodeImage = Image.FromStream(ms); }
-        return this.barcodeImage;
-      }
+    public Code39(string code) : base(code) {
+      
     }
 
-    private StringBuilder BinaryText { get; set; }
-    private int LineBuffer { get; set; }
-    private MemoryStream ms = new MemoryStream();
-
-    public Code39(string code) {
-      this.BinaryText = new StringBuilder();
-      this.LineBuffer = 21;
-
-      var chars = code.ToUpper().ToCharArray();
+    protected override void RenderBarcode() {
+      var chars = Code.ToUpper().ToCharArray();
 
       this.BinaryText.Append(Masks['*']);
       foreach (var c in chars) { this.BinaryText.Append(Masks[c]); }
@@ -105,7 +95,7 @@ namespace Smelds.Barcodes {
             sf.LineAlignment = StringAlignment.Center;
             sf.Alignment = StringAlignment.Center;
 
-            g.DrawString(code.ToUpper(), new Font("Courier", 8), Brushes.Black, r, sf);
+            g.DrawString(Code.ToUpper(), new Font("Courier", 8), Brushes.Black, r, sf);
 
             g.Flush();
 
@@ -121,20 +111,5 @@ namespace Smelds.Barcodes {
         bmp.Save(ms, ImageFormat.Png);
       }
     }
-
-    public void SaveAs(string FilePath, bool OverWrite = false) {
-      if (File.Exists(FilePath) && !OverWrite) { throw new IOException("File exits."); }
-
-      using (var fs = new FileStream(FilePath, FileMode.Create, FileAccess.Write)) {
-        fs.Write(this.BinaryImage, 0, this.BinaryImage.Length);
-      }
-    }
-
-    public void Dispose() {
-      if (this.BarcodeImage != null) { this.BarcodeImage.Dispose(); }
-      this.ms.Dispose();
-      this.BinaryText = null;
-    }
-
   }
 }

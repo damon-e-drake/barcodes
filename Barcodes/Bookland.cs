@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace Smelds.Barcodes {
 
@@ -39,34 +40,20 @@ namespace Smelds.Barcodes {
     }
   }
 
-
-  public class Bookland : IDisposable {
-    public byte[] BinaryImage {
+  public class Bookland : Barcode {
+    public override byte[] BinaryImage {
       get {
+        if (this.ms.Length == 0) { RenderBarcode(); }
         return ms.ToArray();
       }
     }
 
-    private Image barcodeImage;
-    public Image BarcodeImage {
-      get {
-        if (this.barcodeImage == null) { this.barcodeImage = Image.FromStream(ms); }
-        return this.barcodeImage;
-      }
+    public Bookland(string ISBN) : base(ISBN) {
+      
     }
 
-    private StringBuilder BinaryText { get; set; }
-    private int LineBuffer { get; set; }
-
-    private MemoryStream ms = new MemoryStream();
-
-    public Bookland(string ISBN) {
-      // TODO: Regular Expression Replace all but 0-9
-      // TODO: Check Length and Convert 10 to 13 if necessary
-      this.BinaryText = new StringBuilder();
-      this.LineBuffer = 21;
-
-      char[] isbn = ISBN.ToArray();
+    protected override void RenderBarcode() {
+      char[] isbn = this.Code.ToArray();
 
       this.BinaryText.Append("101");
       this.CalculateFirstSet(isbn);
@@ -86,10 +73,10 @@ namespace Smelds.Barcodes {
             g.DrawString("9", new Font("Courier", 8), Brushes.Black, r);
 
             r = new Rectangle(26, 72, 42, 15);
-            g.DrawString(ISBN.Substring(1, 6), new Font("Courier", 8), Brushes.Black, r);
+            g.DrawString(Code.Substring(1, 6), new Font("Courier", 8), Brushes.Black, r);
 
             r = new Rectangle(72, 72, 42, 15);
-            g.DrawString(ISBN.Substring(7, 6), new Font("Courier", 8), Brushes.Black, r);
+            g.DrawString(Code.Substring(7, 6), new Font("Courier", 8), Brushes.Black, r);
 
             g.Flush();
 
@@ -132,20 +119,6 @@ namespace Smelds.Barcodes {
       for (int i = 7; i < set.Length; i++) {
         this.BinaryText.Append(vals[int.Parse(set[i].ToString())]);
       }
-    }
-
-    public void SaveAs(string FilePath, bool OverWrite = false) {
-      if (File.Exists(FilePath) && !OverWrite) { throw new IOException("File exits."); }
-
-      using (var fs = new FileStream(FilePath, FileMode.Create, FileAccess.Write)) {
-        fs.Write(this.BinaryImage, 0, this.BinaryImage.Length);
-      }
-    }
-
-    public void Dispose() {
-      if (this.BarcodeImage != null) { this.BarcodeImage.Dispose(); }
-      this.ms.Dispose();
-      this.BinaryText = null;
     }
   }
 }

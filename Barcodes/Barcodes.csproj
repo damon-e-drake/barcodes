@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BarCode.cs" />
     <Compile Include="Bookland.cs" />
     <Compile Include="Code39.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
