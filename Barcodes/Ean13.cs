@@ -42,7 +42,7 @@ namespace Smelds.Barcodes {
 
     public bool IsValid {
       get {
-        return this.Code[11].ToString() == CalculateCheckDigit();
+        return this.Code[12].ToString() == CalculateCheckDigit();
       }
     }
 
