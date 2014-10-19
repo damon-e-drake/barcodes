@@ -110,7 +110,7 @@ namespace Smelds.Barcodes {
         k += i % 2 == 0 ? int.Parse(this.Code[i - 1].ToString()) * 3 : int.Parse(this.Code[i - 1].ToString());
       }
 
-      return (10 - (k % 10)).ToString();
+      return 10 - (k % 10) == 10 ? "0" : (10 - (k % 10)).ToString();
     }
 
     private void CalculateLeftSide(char[] set) {
