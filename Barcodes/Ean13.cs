@@ -46,7 +46,7 @@ namespace Smelds.Barcodes {
       }
     }
 
-    public Ean13(string code) : base(code) {
+    public Ean13(string code, string bgColor = "#FFFFFF", string barColor = "#000000") : base(code, bgColor, barColor) {
       if (!Regex.IsMatch(this.Code, @"^(\d{12}|\d{13})$")) { throw new FormatException("ISBN 13 must be either 12 or 13 digits with no formatting."); }
       if (this.Code.Length == 12) { this.Code += CalculateCheckDigit(); }
     }
@@ -63,19 +63,19 @@ namespace Smelds.Barcodes {
       using (Bitmap bmp = new Bitmap(135, 105, PixelFormat.Format32bppRgb)) {
         using (Pen pen = new Pen(Color.White)) {
           using (Graphics g = Graphics.FromImage(bmp)) {
-            g.Clear(Color.White);
+            g.Clear(this.bgColor);
 
             Rectangle r = new Rectangle(10, 72, 10, 15);
             g.SmoothingMode = SmoothingMode.AntiAlias;
             g.InterpolationMode = InterpolationMode.HighQualityBicubic;
             g.PixelOffsetMode = PixelOffsetMode.HighQuality;
-            g.DrawString(this.Code[0].ToString(), new Font("Courier", 8), Brushes.Black, r);
+            g.DrawString(this.Code[0].ToString(), new Font("Courier", 8), new SolidBrush(this.barColor), r);
 
             r = new Rectangle(26, 72, 42, 15);
-            g.DrawString(Code.Substring(1, 6), new Font("Courier", 8), Brushes.Black, r);
+            g.DrawString(Code.Substring(1, 6), new Font("Courier", 8), new SolidBrush(this.barColor), r);
 
             r = new Rectangle(72, 72, 42, 15);
-            g.DrawString(Code.Substring(7, 6), new Font("Courier", 8), Brushes.Black, r);
+            g.DrawString(Code.Substring(7, 6), new Font("Courier", 8), new SolidBrush(this.barColor), r);
 
             g.Flush();
 
@@ -84,7 +84,7 @@ namespace Smelds.Barcodes {
             int[] delim = new int[] { 0, 1, 2, 45, 46, 47, 48, 49, 92, 93, 94 };
 
             for (int i = 0; i < binary.Length; i++) {
-              pen.Color = binary[i] == '1' ? Color.Black : Color.White;
+              pen.Color = binary[i] == '1' ? this.barColor : this.bgColor;
 
               if (delim.Contains(i)) {
                 g.DrawLine(pen, this.LineBuffer, 20, this.LineBuffer, 85);
@@ -106,7 +106,7 @@ namespace Smelds.Barcodes {
     private string CalculateCheckDigit() {
       var k = 0;
 
-      for (int i = 1; i < this.Code.Length; i++) {
+      for (int i = 1; i <= 12; i++) {
         k += i % 2 == 0 ? int.Parse(this.Code[i - 1].ToString()) * 3 : int.Parse(this.Code[i - 1].ToString());
       }
 

@@ -2,8 +2,10 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.Globalization;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Smelds.Barcodes {
   public class Barcode : IDisposable {
@@ -12,6 +14,9 @@ namespace Smelds.Barcodes {
     protected int LineBuffer = 0;
     protected MemoryStream ms = null;
     protected string Code = null;
+
+    protected Color bgColor;
+    protected Color barColor;
 
     public virtual byte[] BinaryImage {
       get {
@@ -22,17 +27,28 @@ namespace Smelds.Barcodes {
 
     public Image BarcodeImage {
       get {
-          if (this.ms.Length == 0) { RenderBarcode(); }
-          if (this.barcodeImage == null) { this.barcodeImage = Image.FromStream(this.ms); }
-          return this.barcodeImage;
+        if (this.ms.Length == 0) { RenderBarcode(); }
+        if (this.barcodeImage == null) { this.barcodeImage = Image.FromStream(this.ms); }
+        return this.barcodeImage;
       }
     }
 
-    public Barcode(string code) {
+    public Barcode(string code, string bgColor = "#FFFFFF", string barColor = "#000000") {
       this.ms = new MemoryStream();
       this.BinaryText = new StringBuilder();
       this.LineBuffer = 21;
       this.Code = code;
+
+      this.bgColor = Regex.IsMatch(bgColor, @"^#{1}[a-fA-F0-9]{6}$") ? FromHex(bgColor) : Color.White;
+      this.barColor = Regex.IsMatch(barColor, @"^#{1}[a-fA-F0-9]{6}$") ? FromHex(barColor) : Color.Black;
+    }
+
+    private static Color FromHex(string hex) {
+      hex = hex.Remove(0, 1);
+      var r = int.Parse(hex.Substring(0, 2), NumberStyles.HexNumber);
+      var g = int.Parse(hex.Substring(2, 2), NumberStyles.HexNumber);
+      var b = int.Parse(hex.Substring(4, 2), NumberStyles.HexNumber);
+      return Color.FromArgb(r, g, b);
     }
 
     public void SaveAs(string FilePath, bool OverWrite = false) {
@@ -50,7 +66,7 @@ namespace Smelds.Barcodes {
       using (Bitmap bmp = new Bitmap(width, 105, PixelFormat.Format32bppRgb)) {
         using (Pen pen = new Pen(Color.White)) {
           using (Graphics g = Graphics.FromImage(bmp)) {
-            g.Clear(Color.White);
+            g.Clear(this.bgColor);
 
             Rectangle r = new Rectangle(10, 72, 10, 15);
             g.SmoothingMode = SmoothingMode.AntiAlias;
@@ -67,7 +83,7 @@ namespace Smelds.Barcodes {
             g.Flush();
 
             foreach (var c in binary) {
-              pen.Color = c == '1' ? Color.Black : Color.White;
+              pen.Color = c == '1' ? this.barColor : this.bgColor;
               g.DrawLine(pen, this.LineBuffer, 20, this.LineBuffer, 70);
               this.LineBuffer++;
             }
