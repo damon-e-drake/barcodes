@@ -19,7 +19,7 @@ namespace DEDrake.Barcodes.Utils {
 
 			for (var i = 1; i <= s.Length; i++) k += i % 2 == 0 ? int.Parse(s[i - 1].ToString()) * 3 : int.Parse(s[i - 1].ToString());
 
-			var converted =  s + (10 - k % 10).ToString();
+			var converted = s + (10 - k % 10).ToString();
 
 			return format switch {
 				ISBNFormat.Hyphens => converted,

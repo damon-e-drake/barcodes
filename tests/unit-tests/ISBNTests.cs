@@ -1,17 +1,14 @@
 using DEDrake.Barcodes.Utils;
 using Xunit;
 
-namespace DEDrake.Barcodes.UnitTests
-{
-  public class ISBNTests
-  {
-    [Theory(DisplayName = "Convert ISBN 10 to 13")]
+namespace DEDrake.Barcodes.UnitTests {
+	public class ISBNTests {
+		[Theory(DisplayName = "Convert ISBN 10 to 13")]
 		[InlineData("0-358-65303-7", "9780358653035")]
 		[InlineData("0358653037", "9780358653035")]
 		[InlineData("1098100964", "9781098100964")]
 		[InlineData("043942089x", "9780439420891")]
-		public void Convert10To13(string isbn10, string isbn13)
-    {
+		public void Convert10To13(string isbn10, string isbn13) {
 			var converted = isbn10.ISBNConvert10To13();
 
 			Assert.Equal(isbn13, converted);
