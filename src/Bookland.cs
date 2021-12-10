@@ -1,35 +1,8 @@
 ﻿using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using System.Text.RegularExpressions;
 
 namespace DEDrake.Barcodes {
-
-	public static class ISBN {
-		public static string ISBNConvert10To13(this string isbn10) {
-			if (!Regex.IsMatch(isbn10, @"^(\d{9}|\d{10}|\d{9}[Xx])$")) throw new FormatException("ISBN 10 must be either 9 or 10 digits with no formatting.");
-			var s = "978" + isbn10[..9];
-			var k = 0;
-
-			for (var i = 1; i <= s.Length; i++) k += i % 2 == 0 ? int.Parse(s[i - 1].ToString()) * 3 : int.Parse(s[i - 1].ToString());
-
-			return s + (10 - k % 10).ToString();
-		}
-
-		public static string ISBNConvert13to10(this string isbn13) {
-			if (!Regex.IsMatch(isbn13, @"^(\d{12}|\d{13})$")) throw new FormatException("ISBN 13 must be either 12 or 13 digits with no formatting.");
-			var s = isbn13.Substring(3, 9);
-			var k = 0;
-			var x = 0;
-
-			for (var i = 10; i >= 2; i--) {
-				k += i * int.Parse(s[x].ToString());
-				x++;
-			}
-
-			return s + (11 - k % 11 == 10 ? "X" : (11 - k % 11).ToString());
-		}
-	}
 
 	public class Bookland : Barcode {
 		public override byte[] BinaryImage {
