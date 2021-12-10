@@ -32,41 +32,40 @@ namespace DEDrake.Barcodes {
 
 		public void SaveAs(string FilePath, bool OverWrite = false) {
 			if (File.Exists(FilePath) && !OverWrite) throw new IOException("File exits.");
-			using (var fs = new FileStream(FilePath, FileMode.Create, FileAccess.Write)) fs.Write(BinaryImage, 0, BinaryImage.Length);
+			using var fs = new FileStream(FilePath, FileMode.Create, FileAccess.Write); fs.Write(BinaryImage, 0, BinaryImage.Length);
 		}
 
 		protected virtual void RenderBarcode() {
 			var binary = BinaryText.ToString().ToCharArray();
 			var width = binary.Length + 41;
 
-			using (var bmp = new Bitmap(width, 105, PixelFormat.Format32bppRgb)) {
-				using (var pen = new Pen(Color.White)) using (var g = Graphics.FromImage(bmp)) {
-					g.Clear(Color.White);
+			using var bmp = new Bitmap(width, 105, PixelFormat.Format32bppRgb);
+			using (var pen = new Pen(Color.White)) using (var g = Graphics.FromImage(bmp)) {
+				g.Clear(Color.White);
 
-					var r = new Rectangle(10, 72, 10, 15);
-					g.SmoothingMode = SmoothingMode.AntiAlias;
-					g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-					g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+				var r = new Rectangle(10, 72, 10, 15);
+				g.SmoothingMode = SmoothingMode.AntiAlias;
+				g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+				g.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-					r = new Rectangle(0, 72, width, 15);
-					var sf = new StringFormat {
-						LineAlignment = StringAlignment.Center,
-						Alignment = StringAlignment.Center
-					};
+				r = new Rectangle(0, 72, width, 15);
+				var sf = new StringFormat {
+					LineAlignment = StringAlignment.Center,
+					Alignment = StringAlignment.Center
+				};
 
-					g.DrawString(Code.ToUpper(), new Font("Courier", 8), Brushes.Black, r, sf);
+				g.DrawString(Code.ToUpper(), new Font("Courier", 8), Brushes.Black, r, sf);
 
-					g.Flush();
+				g.Flush();
 
-					foreach (var c in binary) {
-						pen.Color = c == '1' ? Color.Black : Color.White;
-						g.DrawLine(pen, LineBuffer, 20, LineBuffer, 70);
-						LineBuffer++;
-					}
+				foreach (var c in binary) {
+					pen.Color = c == '1' ? Color.Black : Color.White;
+					g.DrawLine(pen, LineBuffer, 20, LineBuffer, 70);
+					LineBuffer++;
 				}
-
-				bmp.Save(ms, ImageFormat.Png);
 			}
+
+			bmp.Save(ms, ImageFormat.Png);
 		}
 
 		protected virtual void Dispose(bool disposing) {

@@ -1,8 +1,6 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace DEDrake.Barcodes {
@@ -10,7 +8,7 @@ namespace DEDrake.Barcodes {
 	public static class ISBN {
 		public static string ISBNConvert10To13(this string isbn10) {
 			if (!Regex.IsMatch(isbn10, @"^(\d{9}|\d{10}|\d{9}[Xx])$")) throw new FormatException("ISBN 10 must be either 9 or 10 digits with no formatting.");
-			var s = "978" + isbn10.Substring(0, 9);
+			var s = "978" + isbn10[..9];
 			var k = 0;
 
 			for (var i = 1; i <= s.Length; i++) k += i % 2 == 0 ? int.Parse(s[i - 1].ToString()) * 3 : int.Parse(s[i - 1].ToString());
@@ -53,41 +51,40 @@ namespace DEDrake.Barcodes {
 			CalculateSecondSet(isbn);
 			BinaryText.Append("101");
 
-			using (var bmp = new Bitmap(135, 105, PixelFormat.Format32bppRgb)) {
-				using (var pen = new Pen(Color.White)) using (var g = Graphics.FromImage(bmp)) {
-					g.Clear(Color.White);
+			using var bmp = new Bitmap(135, 105, PixelFormat.Format32bppRgb);
+			using (var pen = new Pen(Color.White)) using (var g = Graphics.FromImage(bmp)) {
+				g.Clear(Color.White);
 
-					var r = new Rectangle(10, 72, 10, 15);
-					g.SmoothingMode = SmoothingMode.AntiAlias;
-					g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-					g.PixelOffsetMode = PixelOffsetMode.HighQuality;
-					g.DrawString("9", new Font("Courier", 8), Brushes.Black, r);
+				var r = new Rectangle(10, 72, 10, 15);
+				g.SmoothingMode = SmoothingMode.AntiAlias;
+				g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+				g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+				g.DrawString("9", new Font("Courier", 8), Brushes.Black, r);
 
-					r = new Rectangle(26, 72, 42, 15);
-					g.DrawString(Code.Substring(1, 6), new Font("Courier", 8), Brushes.Black, r);
+				r = new Rectangle(26, 72, 42, 15);
+				g.DrawString(Code.Substring(1, 6), new Font("Courier", 8), Brushes.Black, r);
 
-					r = new Rectangle(72, 72, 42, 15);
-					g.DrawString(Code.Substring(7, 6), new Font("Courier", 8), Brushes.Black, r);
+				r = new Rectangle(72, 72, 42, 15);
+				g.DrawString(Code.Substring(7, 6), new Font("Courier", 8), Brushes.Black, r);
 
-					g.Flush();
+				g.Flush();
 
-					var binary = BinaryText.ToString().ToCharArray();
+				var binary = BinaryText.ToString().ToCharArray();
 
-					var delim = new int[] { 0, 1, 2, 45, 46, 47, 48, 49, 92, 93, 94 };
+				var delim = new int[] { 0, 1, 2, 45, 46, 47, 48, 49, 92, 93, 94 };
 
-					for (var i = 0; i < binary.Length; i++) {
-						pen.Color = binary[i] == '1' ? Color.Black : Color.White;
+				for (var i = 0; i < binary.Length; i++) {
+					pen.Color = binary[i] == '1' ? Color.Black : Color.White;
 
-						if (delim.Contains(i)) g.DrawLine(pen, LineBuffer, 20, LineBuffer, 85);
-						else g.DrawLine(pen, LineBuffer, 20, LineBuffer, 70);
+					if (delim.Contains(i)) g.DrawLine(pen, LineBuffer, 20, LineBuffer, 85);
+					else g.DrawLine(pen, LineBuffer, 20, LineBuffer, 70);
 
-						LineBuffer++;
-					}
-
+					LineBuffer++;
 				}
 
-				bmp.Save(ms, ImageFormat.Png);
 			}
+
+			bmp.Save(ms, ImageFormat.Png);
 		}
 
 		private void CalculateFirstSet(char[] set) {
