@@ -6,10 +6,10 @@ using System.Text;
 namespace DEDrake.Barcodes {
   public class Barcode : IDisposable {
     protected Image? barcodeImage = null;
-    protected StringBuilder? BinaryText = null;
+    protected StringBuilder BinaryText;
     protected int LineBuffer = 0;
-    protected MemoryStream? ms = null;
-    protected string? Code = null;
+    protected MemoryStream ms;
+    protected string Code;
 
     public virtual byte[] BinaryImage {
       get {
@@ -70,7 +70,8 @@ namespace DEDrake.Barcodes {
 
     protected virtual void Dispose(bool disposing) {
       if (disposing) {
-        if (BarcodeImage != null) BarcodeImage.Dispose(); if (ms != null) ms.Dispose();
+        if (BarcodeImage != null) BarcodeImage.Dispose(); 
+        if (ms != null) ms.Dispose();
       }
     }
 
