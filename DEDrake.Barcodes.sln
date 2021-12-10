@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestConsole", "TestConsole\Test.csproj", "{807322C6-56D4-432D-8E87-7593B9E3F462}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "TestConsole\Test.csproj", "{807322C6-56D4-432D-8E87-7593B9E3F462}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Barcodes", "Barcodes\Barcodes.csproj", "{8EF1C045-167C-4712-82D0-34E8AF4DC18A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DEDrake.Barcodes", "src\DEDrake.Barcodes.csproj", "{11569F0D-8027-4E22-B1EF-0A9F09A4A4F7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,12 +17,15 @@ Global
 		{807322C6-56D4-432D-8E87-7593B9E3F462}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{807322C6-56D4-432D-8E87-7593B9E3F462}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{807322C6-56D4-432D-8E87-7593B9E3F462}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8EF1C045-167C-4712-82D0-34E8AF4DC18A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8EF1C045-167C-4712-82D0-34E8AF4DC18A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8EF1C045-167C-4712-82D0-34E8AF4DC18A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8EF1C045-167C-4712-82D0-34E8AF4DC18A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11569F0D-8027-4E22-B1EF-0A9F09A4A4F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11569F0D-8027-4E22-B1EF-0A9F09A4A4F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11569F0D-8027-4E22-B1EF-0A9F09A4A4F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11569F0D-8027-4E22-B1EF-0A9F09A4A4F7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7D486A87-9235-48F3-8DBA-9D2CD4DA0CE6}
 	EndGlobalSection
 EndGlobal
