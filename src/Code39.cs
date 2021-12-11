@@ -65,7 +65,7 @@ namespace DEDrake.Barcodes {
 
     protected override void RenderBarcode() {
       var chars = Code.ToUpper().ToCharArray();
- 
+
       BinaryText.Append(Masks['*']);
       foreach (var c in chars) BinaryText.Append(Masks[c]); BinaryText.Append(Masks['*']);
 

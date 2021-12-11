@@ -8,10 +8,11 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{49706B8C-29A8-45D6-A676-4F84CCBB9F08}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		.github\workflows\build-test.yml = .github\workflows\build-test.yml
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DEDrake.Barcodes.UnitTests", "tests\unit-tests\DEDrake.Barcodes.UnitTests.csproj", "{36DFA842-1A6C-402B-B8B9-08035342C6B6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DEDrake.Barcodes.UnitTests", "tests\unit-tests\DEDrake.Barcodes.UnitTests.csproj", "{36DFA842-1A6C-402B-B8B9-08035342C6B6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

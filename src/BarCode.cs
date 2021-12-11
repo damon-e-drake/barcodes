@@ -19,7 +19,9 @@ namespace DEDrake.Barcodes {
 
     public Image BarcodeImage {
       get {
-        if (ms.Length == 0) RenderBarcode(); if (barcodeImage == null) barcodeImage = Image.FromStream(ms); return barcodeImage;
+        if (ms.Length == 0) RenderBarcode();
+        if (barcodeImage == null) barcodeImage = Image.FromStream(ms);
+        return barcodeImage;
       }
     }
 
@@ -31,7 +33,8 @@ namespace DEDrake.Barcodes {
     }
 
     public void SaveAs(string FilePath, bool OverWrite = false) {
-      if (File.Exists(FilePath) && !OverWrite) throw new IOException("File exits.");
+      if (File.Exists(FilePath) && !OverWrite)
+        throw new IOException("File exits.");
       using var fs = new FileStream(FilePath, FileMode.Create, FileAccess.Write); fs.Write(BinaryImage, 0, BinaryImage.Length);
     }
 
@@ -70,7 +73,7 @@ namespace DEDrake.Barcodes {
 
     protected virtual void Dispose(bool disposing) {
       if (disposing) {
-        if (BarcodeImage != null) BarcodeImage.Dispose(); 
+        if (BarcodeImage != null) BarcodeImage.Dispose();
         if (ms != null) ms.Dispose();
       }
     }
