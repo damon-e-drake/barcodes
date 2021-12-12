@@ -21,9 +21,10 @@ namespace DEDrake.Barcodes.Utils {
 
       var converted = s + (10 - k % 10).ToString();
 
+      // 978-0-358-65303-5
       return format switch {
-        ISBNFormat.Hyphens => converted,
-        ISBNFormat.Spaces => converted,
+        ISBNFormat.Hyphens => $"{converted[0..3]}-{converted[3]}-{converted[4..7]}-{converted[7..12]}-{converted[12]}",
+        ISBNFormat.Spaces => $"{converted[0..3]} {converted[3]} {converted[4..7]} {converted[7..12]} {converted[12]}",
         ISBNFormat.None => converted,
         _ => converted,
       };
@@ -47,8 +48,8 @@ namespace DEDrake.Barcodes.Utils {
       var converted = s + (11 - k % 11 == 10 ? "X" : (11 - k % 11).ToString());
 
       return format switch {
-        ISBNFormat.Hyphens => converted,
-        ISBNFormat.Spaces => converted,
+        ISBNFormat.Hyphens => $"{converted[0]}-{converted[1..4]}-{converted[4..9]}-{converted[9]}",
+        ISBNFormat.Spaces => $"{converted[0]} {converted[1..4]} {converted[4..9]} {converted[9]}",
         ISBNFormat.None => converted,
         _ => converted,
       };

@@ -10,7 +10,7 @@
     <RepositoryUrl>https://github.com/damon-e-drake/barcodes</RepositoryUrl>
     <PackageTags>barcodes, code39, ean, bookland, isbn</PackageTags>
     <NeutralLanguage>en-US</NeutralLanguage>
-    <Version>1.0.0-alpha</Version>
+    <Version>1.0.2-alpha</Version>
   </PropertyGroup>
 
   <ItemGroup>
